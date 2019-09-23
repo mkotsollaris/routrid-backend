@@ -1,5 +1,6 @@
 package com.bankapp.business.app;
 
+import com.google.gson.Gson;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -38,7 +39,7 @@ public class BusinessappApplication implements CommandLineRunner {
 	 public String getIbanValidity(@PathVariable("iban") String iban)  throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().addHeader("x-api-key","123")
+        Request request = new Request.Builder().addHeader("x-api-key","oHYsiDXR2OUbROdRXCe7W3WTvLhA9ERE")
                 .url(SWIFT_BASE_URL + "/ibans/"+ iban + "/validity")
                 .build();
 
@@ -48,11 +49,10 @@ public class BusinessappApplication implements CommandLineRunner {
 
             return response.body().string();
 
-
         }
 
 
-	@RequestMapping(value = "/countrycodes", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/getcountrycodes", method = RequestMethod.GET)
 
 	public String getCountryCodes()  throws IOException {
 
@@ -65,8 +65,10 @@ public class BusinessappApplication implements CommandLineRunner {
 
 		Call call = client.newCall(request);
 		Response response = call.execute();
+		
+        String j = "\"" +  response.body().string() + "\"";
 
-		return response.body().string();
+		return j;
 
 
 	}
