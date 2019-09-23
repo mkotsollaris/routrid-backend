@@ -20,15 +20,9 @@ import java.io.IOException;
 @SpringBootApplication
 @RestController
 public class BusinessappApplication implements CommandLineRunner {
-	/*@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(BusinessappApplication.class);
-	}
-
-*/
 
 	public static final String SWIFT_BASE_URL = "https://sandbox.swift.com/swiftref-api";
-	public static final String TRULIO_BASE_URL = "https://sandbox.swift.com/swiftref-api";
+	public static final String TRULIO_BASE_URL = "https://gateway.trulioo.com/trial";
 	private static final Logger logger = LoggerFactory.getLogger(BusinessappApplication.class);
 
 	@Value("${spring.application.name}")
@@ -40,12 +34,11 @@ public class BusinessappApplication implements CommandLineRunner {
 	}
 
 
-
 	@RequestMapping(value = "/getIBanValidity/{iban}", method = RequestMethod.GET)
 	 public String getIbanValidity(@PathVariable("iban") String iban)  throws IOException {
-	//public String getIbanValidity() {
-       OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().addHeader("x-api-key","oHYsiDXR2OUbROdRXCe7W3WTvLhA9ERE")
+
+		OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().addHeader("x-api-key","123")
                 .url(SWIFT_BASE_URL + "/ibans/"+ iban + "/validity")
                 .build();
 
@@ -61,10 +54,24 @@ public class BusinessappApplication implements CommandLineRunner {
 
 
 
-	/*@Override
-	public void run(ApplicationArguments arg0) throws Exception {
-		System.out.println("Hello World from Application Runner");
-	}*/
+	@RequestMapping(value = "/api/getcountrycodes", method = RequestMethod.GET)
+
+	public String getCountryCodes()  throws IOException {
+
+		OkHttpClient client = new OkHttpClient();
+		Request request = new Request.Builder().addHeader("x-api-key","oHYsiDXR2OUbROdRXCe7W3WTvLhA9ERE")
+				.url(SWIFT_BASE_URL + "/ibans/"+ iban + "/validity")
+				.build();
+
+		Call call = client.newCall(request);
+		Response response = call.execute();
+
+		return response.body().string();
+
+
+	}
+
+
 
 	@Override
 	public void run(String... arg0) throws Exception {
