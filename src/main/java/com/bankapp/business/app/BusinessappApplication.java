@@ -1,10 +1,9 @@
 package com.bankapp.business.app;
 
 
-import com.bankapp.business.model.BusinessDataDAO;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
+import com.bankapp.business.model.ChargeAmount;
+import com.bankapp.business.model.PaymentEvent;
 import okhttp3.*;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
@@ -21,7 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SpringBootApplication
@@ -233,9 +234,45 @@ public class BusinessappApplication {
 				.addHeader("Accept-Encoding", "gzip, deflate")
 				.build();
 
-		Response response = client.newCall(request).execute();
-		return response.body().string();
+		PaymentEvent t1p1 = new PaymentEvent("BANABEBB","BANBUS33","SHAR",new ChargeAmount("GBP","0"));
+		PaymentEvent t1p2 = new PaymentEvent("BANBUS33","BANCDEFF","SHAR",new ChargeAmount("GBP","5"));
+		PaymentEvent t1p3 = new PaymentEvent("BANCDEFF","","SHAR",new ChargeAmount("GBP","10"));
 
+		List t1 = new ArrayList<PaymentEvent>();
+		t1.add(t1p1);
+		t1.add(t1p2);
+		t1.add(t1p3);
+		String recvdSVG = helperSVG(t1);
+
+		Response response = client.newCall(request).execute();
+		//JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+		//return jsonObject.getAsJsonArray().toString();
+		//System.out.println(jsonObject.toString());
+		//return response.body().string();
+
+         return recvdSVG;
+
+
+		// return response.body().string();
+
+	}
+
+
+	private String helperSVG(List<PaymentEvent> paymentlist){
+
+		String element = "graph LR";
+		String fromTo;
+		String alteredSVG=null;
+		alteredSVG = element;
+
+		for (PaymentEvent pe : paymentlist) {
+
+
+			 alteredSVG = alteredSVG +"\n" + pe.getFrom() + "--> " + pe.getTo() ;
+
+		}
+
+        return alteredSVG;
 	}
 
 
