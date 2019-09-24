@@ -50,7 +50,6 @@ public class BusinessappApplication  {
             Response response = call.execute();
             return response.body().string();
 
-
         }
 
     @CrossOrigin
@@ -106,8 +105,6 @@ public class BusinessappApplication  {
 
 		Call call = client.newCall(request);
 		Response response = call.execute();
-//		JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
-//		return jsonObject.toString();
 		HashMap<String, String> map = new HashMap<>();
 
 		map.put("response", response.body().string());
@@ -130,10 +127,8 @@ public class BusinessappApplication  {
 
 		Call call = client.newCall(request);
 		Response response = call.execute();
-//		JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
-//		return jsonObject.toString();
-		HashMap<String, String> map = new HashMap<>();
 
+		HashMap<String, String> map = new HashMap<>();
 		map.put("response", response.body().string());
 		return map;
 
@@ -159,8 +154,6 @@ public class BusinessappApplication  {
 				.build();
 		Call call = client.newCall(request);
 		Response response = call.execute();
-//		JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
-//		return jsonObject.toString();
 		return response.body().string();
 
 	}
