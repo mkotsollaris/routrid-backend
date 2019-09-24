@@ -41,6 +41,7 @@ public class BusinessappApplication  {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/getIBanValidity/{iban}", method = RequestMethod.GET)
 	 public String getIbanValidity(@PathVariable("iban") String iban)  throws IOException {
 
@@ -55,7 +56,7 @@ public class BusinessappApplication  {
 
         }
 
-
+	@CrossOrigin
 	@RequestMapping(value = "/api/getcountrycodes", method = RequestMethod.GET)
 	public Map getCountryCodes()  throws IOException {
 
@@ -74,7 +75,7 @@ public class BusinessappApplication  {
 
 	}
 
-
+	@CrossOrigin
 	@RequestMapping(value = "/api/getrecommendedfields/{cc}", method = RequestMethod.GET)
 	public String getRecommendedFields(@PathVariable("cc") String cc)  throws IOException {
 
@@ -93,7 +94,7 @@ public class BusinessappApplication  {
 
 	}
 
-
+	@CrossOrigin
 	@RequestMapping(value = "/api/getcountrysubdivisions/{cc}", method = RequestMethod.GET)
 	public String getCountrySubdivisions(@PathVariable("cc") String cc)  throws IOException {
 
@@ -114,7 +115,7 @@ public class BusinessappApplication  {
 
 
 
-
+	@CrossOrigin
 	@RequestMapping(value = "/api/getdetailedconsents/{cc}", method = RequestMethod.GET)
 	public String getDetailedConsents(@PathVariable("cc") String cc)  throws IOException {
 
@@ -136,7 +137,7 @@ public class BusinessappApplication  {
 
 	//curl -X POST "https://gateway.trulioo.com/trial/verifications/v1/verify" -H "accept: application/json" -H "Content-Type: application/json" -H "x-trulioo-api-key: 26f4c53b1665d9727177636e6ddfacfe" -d "{\"AcceptTruliooTermsAndConditions\":true,\"CleansedAddress\":false,\"ConfigurationName\":\"Identity Verification\",\"ConsentForDataSources\":[\"Visa Verification\"],\"CountryCode\":\"AU\",\"DataFields\":{\"PersonInfo\":{\"FirstGivenName\":\"J\",\"FirstSurName\":\"Smith\",\"MiddleName\":\"Henry\",\"DayOfBirth\":5,\"MonthOfBirth\":3,\"YearOfBirth\":1983,\"MinimumAge\":0},\"Location\":{\"BuildingNumber\":\"10\",\"PostalCode\":\"3108\",\"StateProvinceCode\":\"VIC\",\"StreetName\":\"Lawford\",\"StreetType\":\"St\",\"Suburb\":\"Doncaster\",\"UnitNumber\":\"3\"},\"Communication\":{\"EmailAddress\":\"testpersonAU%40gdctest.com\",\"Telephone\":\"03 9896 8785\"},\"Passport\":{\"Number\":\"N1236548\"}}}"
 
-
+	@CrossOrigin
 	@RequestMapping(value = "/api/verify", method = RequestMethod.POST)
 	public String apiVerify(@org.springframework.web.bind.annotation.RequestBody String data)  throws IOException {
 
@@ -158,6 +159,8 @@ public class BusinessappApplication  {
 		return response.body().string();
 
 	}
+
+
 
 
 //	@RequestMapping(value = "/api/verify", method = RequestMethod.POST)
@@ -182,6 +185,33 @@ public class BusinessappApplication  {
 //
 //	}
 
+
+	@CrossOrigin
+	@RequestMapping(value = "/acctPreval", method = RequestMethod.POST)
+	public String acctPreval(@org.springframework.web.bind.annotation.RequestBody String data)  throws IOException {
+
+		OkHttpClient client = new OkHttpClient();
+		RequestBody body = RequestBody.create(
+				MediaType.parse("application/json; charset=utf-8"), data);
+		Request request = new Request.Builder().addHeader("x-api-key","yVGhKiV5z1ZGdaqFXoZ8AiSA9n5CrY6B")
+				.addHeader("LAUApplicationID","001")
+				.addHeader("LAUCallTime","2018-03-23T15:5")
+				.addHeader("LAURequestNonce","e802ab96-bb3a-4965-9139-5214b9f0f074")
+				.addHeader("LAUSigned","(ApplAPIKey=yVGhKiV5z1ZGdaqFXoZ8AiSA9n5CrY6B),(x-bic=cclabeb0)")
+				.addHeader("LAUVersion","1.0")
+				.addHeader("x-bic","cclabeb0")
+				.addHeader("LAUSignature","Qvml0qyQ4HcViGDwWpes2A==")
+				.addHeader("Content-Type","application/json")
+				.addHeader("accept","application/json")
+				.addHeader("User-Agent","SIBOS")
+				.url("https://sandbox.swift.com/swift-preval-pilot/v1/accounts/verification")
+				.post(body)
+				.build();
+		Call call = client.newCall(request);
+		Response response = call.execute();
+		return response.body().string();
+
+	}
 
 
 }
