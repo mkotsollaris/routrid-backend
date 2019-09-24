@@ -74,7 +74,7 @@ public class BusinessappApplication  {
 
 	@CrossOrigin
 	@RequestMapping(value = "/api/getrecommendedfields/{cc}", method = RequestMethod.GET)
-	public String getRecommendedFields(@PathVariable("cc") String cc)  throws IOException {
+	public Map getRecommendedFields(@PathVariable("cc") String cc)  throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
 		Request request = new Request.Builder().addHeader("x-trulioo-api-key","f8b19aa8eb1942f2eb840c1f097eb51f")
