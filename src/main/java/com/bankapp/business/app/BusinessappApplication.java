@@ -95,7 +95,7 @@ public class BusinessappApplication  {
 
 	@CrossOrigin
 	@RequestMapping(value = "/api/getcountrysubdivisions/{cc}", method = RequestMethod.GET)
-	public String getCountrySubdivisions(@PathVariable("cc") String cc)  throws IOException {
+	public Map getCountrySubdivisions(@PathVariable("cc") String cc)  throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
 		Request request = new Request.Builder().addHeader("x-trulioo-api-key","f8b19aa8eb1942f2eb840c1f097eb51f")
@@ -108,7 +108,10 @@ public class BusinessappApplication  {
 		Response response = call.execute();
 //		JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
 //		return jsonObject.toString();
-		return response.body().string();
+		HashMap<String, String> map = new HashMap<>();
+
+		map.put("response", response.body().string());
+		return map;
 
 	}
 
@@ -116,7 +119,7 @@ public class BusinessappApplication  {
 
 	@CrossOrigin
 	@RequestMapping(value = "/api/getdetailedconsents/{cc}", method = RequestMethod.GET)
-	public String getDetailedConsents(@PathVariable("cc") String cc)  throws IOException {
+	public Map getDetailedConsents(@PathVariable("cc") String cc)  throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
 		Request request = new Request.Builder().addHeader("x-trulioo-api-key","f8b19aa8eb1942f2eb840c1f097eb51f")
@@ -129,7 +132,10 @@ public class BusinessappApplication  {
 		Response response = call.execute();
 //		JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
 //		return jsonObject.toString();
-		return response.body().string();
+		HashMap<String, String> map = new HashMap<>();
+
+		map.put("response", response.body().string());
+		return map;
 
 	}
 
