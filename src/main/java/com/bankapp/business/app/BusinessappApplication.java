@@ -1,10 +1,7 @@
 package com.bankapp.business.app;
 
 
-import com.bankapp.business.model.BusinessDataDAO;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
 import okhttp3.*;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
@@ -41,6 +38,7 @@ public class BusinessappApplication  {
 
 	}
 
+    @CrossOrigin
 	@RequestMapping(value = "/getIBanValidity/{iban}", method = RequestMethod.GET)
 	 public String getIbanValidity(@PathVariable("iban") String iban)  throws IOException {
 
@@ -55,7 +53,7 @@ public class BusinessappApplication  {
 
         }
 
-
+    @CrossOrigin
 	@RequestMapping(value = "/api/getcountrycodes", method = RequestMethod.GET)
 	public Map getCountryCodes()  throws IOException {
 
@@ -74,7 +72,7 @@ public class BusinessappApplication  {
 
 	}
 
-
+	@CrossOrigin
 	@RequestMapping(value = "/api/getrecommendedfields/{cc}", method = RequestMethod.GET)
 	public String getRecommendedFields(@PathVariable("cc") String cc)  throws IOException {
 
@@ -93,7 +91,7 @@ public class BusinessappApplication  {
 
 	}
 
-
+	@CrossOrigin
 	@RequestMapping(value = "/api/getcountrysubdivisions/{cc}", method = RequestMethod.GET)
 	public String getCountrySubdivisions(@PathVariable("cc") String cc)  throws IOException {
 
@@ -114,7 +112,7 @@ public class BusinessappApplication  {
 
 
 
-
+	@CrossOrigin
 	@RequestMapping(value = "/api/getdetailedconsents/{cc}", method = RequestMethod.GET)
 	public String getDetailedConsents(@PathVariable("cc") String cc)  throws IOException {
 
@@ -136,7 +134,7 @@ public class BusinessappApplication  {
 
 	//curl -X POST "https://gateway.trulioo.com/trial/verifications/v1/verify" -H "accept: application/json" -H "Content-Type: application/json" -H "x-trulioo-api-key: 26f4c53b1665d9727177636e6ddfacfe" -d "{\"AcceptTruliooTermsAndConditions\":true,\"CleansedAddress\":false,\"ConfigurationName\":\"Identity Verification\",\"ConsentForDataSources\":[\"Visa Verification\"],\"CountryCode\":\"AU\",\"DataFields\":{\"PersonInfo\":{\"FirstGivenName\":\"J\",\"FirstSurName\":\"Smith\",\"MiddleName\":\"Henry\",\"DayOfBirth\":5,\"MonthOfBirth\":3,\"YearOfBirth\":1983,\"MinimumAge\":0},\"Location\":{\"BuildingNumber\":\"10\",\"PostalCode\":\"3108\",\"StateProvinceCode\":\"VIC\",\"StreetName\":\"Lawford\",\"StreetType\":\"St\",\"Suburb\":\"Doncaster\",\"UnitNumber\":\"3\"},\"Communication\":{\"EmailAddress\":\"testpersonAU%40gdctest.com\",\"Telephone\":\"03 9896 8785\"},\"Passport\":{\"Number\":\"N1236548\"}}}"
 
-
+	@CrossOrigin
 	@RequestMapping(value = "/api/verify", method = RequestMethod.POST)
 	public String apiVerify(@org.springframework.web.bind.annotation.RequestBody String data)  throws IOException {
 
