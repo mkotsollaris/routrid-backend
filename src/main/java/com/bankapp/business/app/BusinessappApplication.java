@@ -7,6 +7,8 @@ import com.bankapp.business.model.PaymentEvent;
 import okhttp3.*;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,10 +29,11 @@ import java.util.Map;
 
 @SpringBootApplication
 @RestController
-public class BusinessappApplication {
+public class BusinessappApplication  {
 
 	public static final String SWIFT_BASE_URL = "https://sandbox.swift.com/swiftref-api";
 	public static final String TRULIOO_BASE_URL = "https://gateway.trulioo.com/trial/configuration/v1/";
+	public static final String TINK_BASE_URL = "https://api.tink.com";
 
 	private static final Logger logger = LoggerFactory.getLogger(BusinessappApplication.class);
 
@@ -42,29 +45,29 @@ public class BusinessappApplication {
 
 	}
 
-	@CrossOrigin
+    @CrossOrigin
 	@RequestMapping(value = "/getIBanValidity/{iban}", method = RequestMethod.GET)
-	public String getIbanValidity(@PathVariable("iban") String iban) throws IOException {
+	 public String getIbanValidity(@PathVariable("iban") String iban)  throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
-		Request request = new Request.Builder().addHeader("x-api-key", "oHYsiDXR2OUbROdRXCe7W3WTvLhA9ERE")
-				.url(SWIFT_BASE_URL + "/ibans/" + iban + "/validity")
-				.build();
-		Call call = client.newCall(request);
-		Response response = call.execute();
-		return response.body().string();
+        Request request = new Request.Builder().addHeader("x-api-key","oHYsiDXR2OUbROdRXCe7W3WTvLhA9ERE")
+                .url(SWIFT_BASE_URL + "/ibans/"+ iban + "/validity")
+                .build();
+            Call call = client.newCall(request);
+            Response response = call.execute();
+            return response.body().string();
 
 
-	}
+        }
 
-	@CrossOrigin
+    @CrossOrigin
 	@RequestMapping(value = "/api/getcountrycodes", method = RequestMethod.GET)
-	public Map getCountryCodes() throws IOException {
+	public Map getCountryCodes()  throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
-		Request request = new Request.Builder().addHeader("x-trulioo-api-key", "f8b19aa8eb1942f2eb840c1f097eb51f")
-				.addHeader("Content-Type", "application/json")
-				.addHeader("User-Agent", "SIBOS")
+		Request request = new Request.Builder().addHeader("x-trulioo-api-key","f8b19aa8eb1942f2eb840c1f097eb51f")
+				.addHeader("Content-Type","application/json")
+				.addHeader("User-Agent","SIBOS")
 				.url(TRULIOO_BASE_URL + "countrycodes/Identity Verification")
 				.build();
 
@@ -78,31 +81,33 @@ public class BusinessappApplication {
 
 	@CrossOrigin
 	@RequestMapping(value = "/api/getrecommendedfields/{cc}", method = RequestMethod.GET)
-	public String getRecommendedFields(@PathVariable("cc") String cc) throws IOException {
+	public Map getRecommendedFields(@PathVariable("cc") String cc)  throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
-		Request request = new Request.Builder().addHeader("x-trulioo-api-key", "f8b19aa8eb1942f2eb840c1f097eb51f")
-				.addHeader("Content-Type", "application/json")
-				.addHeader("User-Agent", "SIBOS")
+		Request request = new Request.Builder().addHeader("x-trulioo-api-key","f8b19aa8eb1942f2eb840c1f097eb51f")
+				.addHeader("Content-Type","application/json")
+				.addHeader("User-Agent","SIBOS")
 				.url(TRULIOO_BASE_URL + "recommendedfields/Identity Verification/" + cc)
 				.build();
 
 		Call call = client.newCall(request);
 		Response response = call.execute();
+		HashMap<String, String> map = new HashMap<>();
 
-		return response.body().string();
+		map.put("response", response.body().string());
+		return map;
 
 
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/api/getcountrysubdivisions/{cc}", method = RequestMethod.GET)
-	public String getCountrySubdivisions(@PathVariable("cc") String cc) throws IOException {
+	public Map getCountrySubdivisions(@PathVariable("cc") String cc)  throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
-		Request request = new Request.Builder().addHeader("x-trulioo-api-key", "f8b19aa8eb1942f2eb840c1f097eb51f")
-				.addHeader("Content-Type", "application/json")
-				.addHeader("User-Agent", "SIBOS")
+		Request request = new Request.Builder().addHeader("x-trulioo-api-key","f8b19aa8eb1942f2eb840c1f097eb51f")
+				.addHeader("Content-Type","application/json")
+				.addHeader("User-Agent","SIBOS")
 				.url(TRULIOO_BASE_URL + "countrysubdivisions/" + cc)
 				.build();
 
@@ -110,19 +115,23 @@ public class BusinessappApplication {
 		Response response = call.execute();
 //		JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
 //		return jsonObject.toString();
-		return response.body().string();
+		HashMap<String, String> map = new HashMap<>();
+
+		map.put("response", response.body().string());
+		return map;
 
 	}
 
 
+
 	@CrossOrigin
 	@RequestMapping(value = "/api/getdetailedconsents/{cc}", method = RequestMethod.GET)
-	public String getDetailedConsents(@PathVariable("cc") String cc) throws IOException {
+	public Map getDetailedConsents(@PathVariable("cc") String cc)  throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
-		Request request = new Request.Builder().addHeader("x-trulioo-api-key", "f8b19aa8eb1942f2eb840c1f097eb51f")
-				.addHeader("Content-Type", "application/json")
-				.addHeader("User-Agent", "SIBOS")
+		Request request = new Request.Builder().addHeader("x-trulioo-api-key","f8b19aa8eb1942f2eb840c1f097eb51f")
+				.addHeader("Content-Type","application/json")
+				.addHeader("User-Agent","SIBOS")
 				.url(TRULIOO_BASE_URL + "detailedConsents/Identity Verification/" + cc)
 				.build();
 
@@ -130,7 +139,10 @@ public class BusinessappApplication {
 		Response response = call.execute();
 //		JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
 //		return jsonObject.toString();
-		return response.body().string();
+		HashMap<String, String> map = new HashMap<>();
+
+		map.put("response", response.body().string());
+		return map;
 
 	}
 
@@ -139,16 +151,16 @@ public class BusinessappApplication {
 
 	@CrossOrigin
 	@RequestMapping(value = "/api/verify", method = RequestMethod.POST)
-	public String apiVerify(@org.springframework.web.bind.annotation.RequestBody String data) throws IOException {
+	public String apiVerify(@org.springframework.web.bind.annotation.RequestBody String data)  throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
 		//String data = "{\"AcceptTruliooTermsAndConditions\":true,\"CleansedAddress\":false,\"ConfigurationName\":\"Identity Verification\",\"ConsentForDataSources\":[\"Visa Verification\"],\"CountryCode\":\"AU\",\"DataFields\":{\"PersonInfo\":{\"FirstGivenName\":\"J\",\"FirstSurName\":\"Smith\",\"MiddleName\":\"Henry\",\"DayOfBirth\":5,\"MonthOfBirth\":3,\"YearOfBirth\":1983,\"MinimumAge\":0},\"Location\":{\"BuildingNumber\":\"10\",\"PostalCode\":\"3108\",\"StateProvinceCode\":\"VIC\",\"StreetName\":\"Lawford\",\"StreetType\":\"St\",\"Suburb\":\"Doncaster\",\"UnitNumber\":\"3\"},\"Communication\":{\"EmailAddress\":\"testpersonAU%40gdctest.com\",\"Telephone\":\"03 9896 8785\"},\"Passport\":{\"Number\":\"N1236548\"}}}";
 		RequestBody body = RequestBody.create(
 				MediaType.parse("application/json; charset=utf-8"), data);
-		Request request = new Request.Builder().addHeader("x-trulioo-api-key", "f8b19aa8eb1942f2eb840c1f097eb51f")
-				.addHeader("Content-Type", "application/json")
-				.addHeader("accept", "application/json")
-				.addHeader("User-Agent", "SIBOS")
+		Request request = new Request.Builder().addHeader("x-trulioo-api-key","f8b19aa8eb1942f2eb840c1f097eb51f")
+				.addHeader("Content-Type","application/json")
+				.addHeader("accept","application/json")
+				.addHeader("User-Agent","SIBOS")
 				.url("https://gateway.trulioo.com/trial/verifications/v1/verify")
 				.post(body)
 				.build();
@@ -160,28 +172,89 @@ public class BusinessappApplication {
 
 	}
 
+	@CrossOrigin
+	@RequestMapping(value = "api/tink/oauth/{amount}/{name}/{account}", method = RequestMethod.POST)
+	public String getOauthTokenTink(@org.springframework.web.bind.annotation.RequestBody String data, @PathVariable("amount") String amount, @PathVariable("name") String name, @PathVariable("account") String account )  throws IOException {
 
-//	@RequestMapping(value = "/api/verify", method = RequestMethod.POST)
-//	public String apiVerify(@org.springframework.web.bind.annotation.RequestBody BusinessDataDAO bd)  throws IOException {
-//
-//		OkHttpClient client = new OkHttpClient();
-//		//String data = "{\"AcceptTruliooTermsAndConditions\":true,\"CleansedAddress\":false,\"ConfigurationName\":\"Identity Verification\",\"ConsentForDataSources\":[\"Visa Verification\"],\"CountryCode\":\"AU\",\"DataFields\":{\"PersonInfo\":{\"FirstGivenName\":\"J\",\"FirstSurName\":\"Smith\",\"MiddleName\":\"Henry\",\"DayOfBirth\":5,\"MonthOfBirth\":3,\"YearOfBirth\":1983,\"MinimumAge\":0},\"Location\":{\"BuildingNumber\":\"10\",\"PostalCode\":\"3108\",\"StateProvinceCode\":\"VIC\",\"StreetName\":\"Lawford\",\"StreetType\":\"St\",\"Suburb\":\"Doncaster\",\"UnitNumber\":\"3\"},\"Communication\":{\"EmailAddress\":\"testpersonAU%40gdctest.com\",\"Telephone\":\"03 9896 8785\"},\"Passport\":{\"Number\":\"N1236548\"}}}";
-//		RequestBody body = RequestBody.create(
-//				MediaType.parse("application/json; charset=utf-8"),bd);
-//		Request request = new Request.Builder().addHeader("x-trulioo-api-key","f8b19aa8eb1942f2eb840c1f097eb51f")
-//				.addHeader("Content-Type","application/json")
-//				.addHeader("accept","application/json")
-//				.addHeader("User-Agent","SIBOS")
-//				.url("https://gateway.trulioo.com/trial/verifications/v1/verify")
-//				.post(body)
-//				.build();
-//		Call call = client.newCall(request);
-//		Response response = call.execute();
-////		JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
-////		return jsonObject.toString();
-//		return response.body().string();
-//
-//	}
+		OkHttpClient client = new OkHttpClient();
+
+		MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+		RequestBody body = RequestBody.create(mediaType, data);
+		Request request = new Request.Builder()
+				.url(TINK_BASE_URL + "/api/v1/oauth/token")
+				.post(body)
+				.addHeader("Content-Type", "application/x-www-form-urlencoded")
+				.build();
+
+		Call call = client.newCall(request);
+		Response response = call.execute();
+
+    	System.out.println(response.body().toString());
+
+		JSONObject Jobject = new JSONObject(response.body().string());
+
+		System.out.println("JSON is " + Jobject.toString());
+		logger.info(Jobject.toString());
+
+		String[] names = JSONObject.getNames(Jobject);
+		JSONArray jsonArray = Jobject.toJSONArray(new JSONArray(names));
+
+		logger.info(jsonArray.toString());
+		String accessToken = jsonArray.get(0).toString();
+
+    	System.out.println("AC is " + accessToken);
+		return createPaymentRequest(accessToken, amount, name, account);
+
+	}
+
+	@CrossOrigin
+	@RequestMapping(value = "api/payment/request")
+	public String createPaymentRequest(String accessToken, String amount, String name, String account) throws IOException {
+
+		logger.info("I am in create payment request");
+
+		String paymentURLTinkLink = "https://link.tink.com/1.0/pay/?client_id=2362c043b3e0417f9b9597f55a368460&redirect_uri=http://localhost:3000/callback&market=SE&locale=en_GB&payment_request_id=";
+
+		OkHttpClient client = new OkHttpClient();
+
+		String rb = "{\"destinations\":[{\"accountNumber\": \"" + account + "\",\"type\":\"se\",\"reference\":\"Mike\"}],\"amount\":\"" + amount + "\",\"currency\":\"SEK\",\"market\":\"se\",\"recipientName\":\"" + name + "\",\"sourceMessage\":\"OB\"}";
+
+    RequestBody body =
+        RequestBody.create(
+            MediaType.parse("application/json"), rb);
+
+		logger.info("Request Body is: " + body);
+
+		Request request = new Request.Builder()
+				.url(TINK_BASE_URL + "/api/v1/payments/requests")
+				.post(body)
+				.addHeader("Content-Type", "application/json")
+				.addHeader("Authorization", "Bearer " + accessToken)
+				.build();
+
+		Call call = client.newCall(request);
+		Response response = call.execute();
+
+		JSONObject Jobject = new JSONObject(response.body().string());
+
+		System.out.println("JSON for PR is " + Jobject.toString());
+		logger.info(Jobject.toString());
+
+		String[] names = JSONObject.getNames(Jobject);
+		JSONArray jsonArray = Jobject.toJSONArray(new JSONArray(names));
+
+		System.out.println("JSON ARRAY for PR is " + jsonArray.toString());
+		logger.info(jsonArray.toString());
+
+		String paymentRequestId = jsonArray.get(6).toString();
+
+		return paymentURLTinkLink + paymentRequestId;
+
+	}
+
+
+
+
 
 
 	@CrossOrigin
