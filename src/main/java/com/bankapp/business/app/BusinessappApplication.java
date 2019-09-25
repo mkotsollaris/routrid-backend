@@ -20,10 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SpringBootApplication
 @RestController
@@ -214,7 +211,7 @@ public class BusinessappApplication {
 
 	@CrossOrigin
 	@RequestMapping(value = "/getCorpTransactions", method = RequestMethod.GET)
-	public String getCorpTransactions() throws IOException {
+	public String[] getCorpTransactions() throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
 
@@ -238,41 +235,90 @@ public class BusinessappApplication {
 		PaymentEvent t1p2 = new PaymentEvent("BANBUS33","BANCDEFF","SHAR",new ChargeAmount("GBP","5"));
 		PaymentEvent t1p3 = new PaymentEvent("BANCDEFF","","SHAR",new ChargeAmount("GBP","10"));
 
+		PaymentEvent t2p1 = new PaymentEvent("BANABEBB","BANBUT33","SHAR",new ChargeAmount("GBP","0"));
+		PaymentEvent t2p2 = new PaymentEvent("BANBUT33","BANDDEFF","SHAR",new ChargeAmount("GBP","5"));
+		PaymentEvent t2p3 = new PaymentEvent("BANDDEFF","BANDZEFF","SHAR",new ChargeAmount("GBP","10"));
+		PaymentEvent t2p4 = new PaymentEvent("BANDZEFF","BANCDEFF","SHAR",new ChargeAmount("GBP","10"));
+
 		List t1 = new ArrayList<PaymentEvent>();
 		t1.add(t1p1);
 		t1.add(t1p2);
 		t1.add(t1p3);
-		String recvdSVG = helperSVG(t1);
+		String recvdSVG1 = helperSVG(t1);
 
-		Response response = client.newCall(request).execute();
+		List t2 = new ArrayList<PaymentEvent>();
+		t2.add(t2p1);
+		t2.add(t2p2);
+		t2.add(t2p3);
+		t2.add(t2p4);
+		String recvdSVG2 = helperSVG(t2);
+
+        char ch = '"';
+		String[] svgArr = new String[2];
+		String svgEl1 = ch + "text" + ch  + ":" + ch +
+				"graph LR" +   recvdSVG1 + recvdSVG2 + ch;
+
+
+
+		svgArr[0] = "{" + svgEl1 + "}";
+		svgArr[1] = "{" + svgEl1 + "}";
+
+
+		/*svgArr = ["text" + ]
+
+		[{
+			"text": "graph LR\nHSBC--> Morgan_Stalney\nMorgan_Stalney--> TD\nTD-->Bank_of_America\nDEUTSCHE_BANK-->Goldman_Sachs\nGoldman_Sachs-->Bank_of_America"
+		}, {
+			"text": "graph LR\nBMO--> TD\nTD--> VanCity_Bank\nDEUTSCHE_BANK-->Goldman_Sachs\nGoldman_Sachs-->VanCity_Bank"
+		}, {
+			"text": "graph LR\nBMO--> TD\nTD--> VanCity_Bank\nDEUTSCHE_BANK-->Goldman_Sachs\nGoldman_Sachs-->VanCity_Bank"
+		}, {
+			"text": "graph LR\nBMO--> TD\nTD--> VanCity_Bank\nDEUTSCHE_BANK-->Goldman_Sachs\nGoldman_Sachs-->VanCity_Bank"
+		}] */
+
+
+
+//		"\"text\":graph LR\nBANABEBB--> BANBUS33\nBANBUS33--> BANCDEFF\nBANABEBB--> BANBUT33\nBANBUT33--> BANDDEFF\nBANDDEFF--> BANDZEFF\nBANDZEFF--> BANCDEFF",
+//				"\"text\":graph LR\nBANABEBB--> BANBUS33\nBANBUS33--> BANCDEFF\nBANABEBB--> BANBUT33\nBANBUT33--> BANDDEFF\nBANDDEFF--> BANDZEFF\nBANDZEFF--> BANCDEFF"
+
+		//Response response = client.newCall(request).execute();
 		//JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
 		//return jsonObject.getAsJsonArray().toString();
 		//System.out.println(jsonObject.toString());
 		//return response.body().string();
 
-         return recvdSVG;
 
 
+		request = new Request.Builder()
+				.url("http://localhost:3000/generateFlowChart")
+				.build();
 		// return response.body().string();
+
+		//return ("graph LR" +   recvdSVG1 + recvdSVG2);
+
+		return  svgArr;
+
+		//return  "[" + svgArr + "]".;
 
 	}
 
 
 	private String helperSVG(List<PaymentEvent> paymentlist){
 
-		String element = "graph LR";
-		String fromTo;
+
+
 		String alteredSVG=null;
-		alteredSVG = element;
+		alteredSVG = "";
 
 		for (PaymentEvent pe : paymentlist) {
 
-
-			 alteredSVG = alteredSVG +"\n" + pe.getFrom() + "--> " + pe.getTo() ;
+			if(pe.getFrom()!=null && !pe.getFrom().isEmpty() &&  pe.getTo()!=null && !pe.getTo().isEmpty())
+			alteredSVG = alteredSVG +"\n" + pe.getFrom() + "--> " + pe.getTo() ;
 
 		}
 
         return alteredSVG;
+
 	}
 
 
