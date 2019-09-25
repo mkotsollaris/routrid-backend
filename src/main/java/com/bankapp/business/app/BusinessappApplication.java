@@ -211,7 +211,7 @@ public class BusinessappApplication {
 
 	@CrossOrigin
 	@RequestMapping(value = "/getCorpTransactions", method = RequestMethod.GET)
-	public String[] getCorpTransactions() throws IOException {
+	public HashMap<String, String> getCorpTransactions() throws IOException {
 
 		OkHttpClient client = new OkHttpClient();
 
@@ -255,13 +255,16 @@ public class BusinessappApplication {
 
         char ch = '"';
 		String[] svgArr = new String[2];
-		String svgEl1 = ch + "text" + ch  + ":" + ch +
-				"graph LR" +   recvdSVG1 + recvdSVG2 + ch;
+		HashMap<String, String> map = new HashMap<>();
+
+		//String svgEl1 = " graph LR" +   recvdSVG1 + recvdSVG2;
+
+		map.put("text","graph LR" + recvdSVG1);
+		map.put("text", "graph LR" + recvdSVG2);
 
 
-
-		svgArr[0] = "{" + svgEl1 + "}";
-		svgArr[1] = "{" + svgEl1 + "}";
+//		svgArr[0] = svgEl1;
+//		svgArr[1] = svgEl1 ;
 
 
 		/*svgArr = ["text" + ]
@@ -289,14 +292,14 @@ public class BusinessappApplication {
 
 
 
-		request = new Request.Builder()
-				.url("http://localhost:3000/generateFlowChart")
-				.build();
+//		request = new Request.Builder()
+//				.url("http://localhost:3000/generateFlowChart")
+//				.build();
 		// return response.body().string();
 
 		//return ("graph LR" +   recvdSVG1 + recvdSVG2);
 
-		return  svgArr;
+		return  map;
 
 		//return  "[" + svgArr + "]".;
 
